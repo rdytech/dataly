@@ -1,13 +1,11 @@
 module Dataly
   class Importer
-    attr_reader :model, :logger, :errors
+    attr_reader :logger, :errors
+
+    class_attribute :model
 
     def self.model(model)
-      @model = model
-    end
-
-    def model
-      @model ||=  self.class.instance_variable_get(:@model)
+      self.model = model
     end
 
     def logger
