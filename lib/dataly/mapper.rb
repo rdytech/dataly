@@ -26,8 +26,8 @@ module Dataly
     end
 
     def transform(name, value)
-      if fields[name].respond_to?(:call)
-        fields[name].call(value)
+      if fields[name.to_sym].respond_to?(:call)
+        fields[name.to_sym].call(value)
       else
         value
       end
