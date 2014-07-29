@@ -49,7 +49,7 @@ module Dataly
     end
 
     def csv
-      CSV.read(@filename, headers: true)
+      CSV.read(@filename, { headers: true, encoding: 'utf-8' })
     end
   end
 end
