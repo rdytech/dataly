@@ -56,6 +56,20 @@ end
 CompanyImporter.new('files/test.csv', default_mapper: CompanyMapper.new).process
 ```
 
+### Mapping Fields
+
+```ruby
+require 'dataly'
+
+class CompanyMapper < Dataly::Mapper
+  field :user_id, Proc.new {|value| User.find_by_email(value) }
+  field :status, Proc.new {|value| CompanyStatusEnumeration.value_for(value) }
+  field :name, :trading_name
+end
+
+CompanyImporter.new('files/test.csv', default_mapper: CompanyMapper.new).process
+```
+
 ### Creating a custom creator
 
 ```ruby
