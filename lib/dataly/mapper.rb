@@ -8,12 +8,14 @@ module Dataly
 
     def process(row)
       row.map { |name, value|
-        [name.to_sym, value] if attributes.include?(name.to_s)
+        [name.to_sym, (value.blank? ? nil : value)] if attributes.include?(name.to_s)
       }.compact.to_h
     end
+
 
     def attributes
       @model.attribute_names
     end
+
   end
 end

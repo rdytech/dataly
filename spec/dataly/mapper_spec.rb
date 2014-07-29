@@ -5,14 +5,15 @@ end
 
 describe Dataly::Mapper do
 
-  let(:valid_attributes) { %w(name status) }
+  let(:valid_attributes) { %w(name status address) }
   let(:mapper) { described_class.new(Sample) }
 
   let(:row) do
     {
       name: 'beaker',
       status: 'Active',
-      age: 21
+      age: 21,
+      address: ''
     }
   end
 
@@ -20,5 +21,5 @@ describe Dataly::Mapper do
     allow(Sample).to receive(:attribute_names).and_return(valid_attributes)
   end
 
-  specify { expect(mapper.process(row)).to eq({ name: 'beaker', status: 'Active' }) }
+  specify { expect(mapper.process(row)).to eq({ name: 'beaker', status: 'Active', address: nil }) }
 end
