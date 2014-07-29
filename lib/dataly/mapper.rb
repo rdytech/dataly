@@ -1,15 +1,19 @@
-class Mapper
-  attr_reader :model
+module Dataly
+  class Mapper
+    attr_reader :model
 
-  def initialize(model)
-    @model = model
-  end
+    def initialize(model)
+      @model = model
+    end
 
-  def process(row)
-    row.collect { |entry| attributes.include?(entry) }
-  end
+    def process(row)
+      row.map { |name, value|
+        [name.to_sym, value] if attributes.include?(name.to_s)
+      }.compact.to_h
+    end
 
-  def attributes
-    @model.attribute_names
+    def attributes
+      @model.attribute_names
+    end
   end
 end

@@ -1,6 +1,6 @@
 # Dataly
 
-TODO: Write a gem description
+Simple data import from csv.
 
 ## Installation
 
@@ -17,8 +17,17 @@ Or install it yourself as:
     $ gem install dataly
 
 ## Usage
-
-TODO: Write usage instructions here
+```ruby
+require 'dataly'
+importer = Importer.new('sample.csv')
+importer.process
+```     
+##Raising errors
+By default errors are logged, to raise errors instead `errors: :raise`.
+E.g.
+```ruby
+Importer.new('sample.csv', { errors: :raise } )
+``` 
 
 ## Contributing
 

@@ -1,5 +1,16 @@
 require "dataly/version"
 
+require 'logger'
+require 'csv'
+
 module Dataly
-  # Your code goes here...
+  class << self
+    attr_accessor :logger
+  end
 end
+
+require 'dataly/importer'
+require 'dataly/mapper'
+require 'dataly/creator'
+Dataly.logger = Logger.new(STDOUT)
+Dataly.logger.level = Logger::ERROR
