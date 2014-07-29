@@ -48,7 +48,7 @@ require 'dataly'
 
 class CompanyMapper < Dataly::Mapper
   def process(row)
-     row[:site_id] = Site.find(row[:site_id)
+     row[:site_id] = Site.find(row[:site_id))
      row
   end
 end
