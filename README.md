@@ -33,6 +33,9 @@ importer.process
 ```ruby
 require 'dataly'
 
+class Company < ActiveRecord::Base
+end
+
 class CompanyImporter < Dataly::Importer
   model Company
 end
