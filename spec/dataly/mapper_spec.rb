@@ -3,10 +3,14 @@ require 'spec_helper'
 class Sample
 end
 
-describe Dataly::Mapper do
+class FieldMapper < Dataly::Mapper
+  field :user, :user_id
+end
 
-  let(:valid_attributes) { %w(name status address) }
+describe Dataly::Mapper do
+  let(:valid_attributes) { %w(name status address user_id) }
   let(:mapper) { described_class.new(Sample) }
+  let(:field_mapper) { FieldMapper.new(Sample) }
 
   let(:row) do
     {
@@ -14,6 +18,7 @@ describe Dataly::Mapper do
       status: 'Active',
       age: 21,
       address: ''
+      user: "1"
     }
   end
 
@@ -22,4 +27,7 @@ describe Dataly::Mapper do
   end
 
   specify { expect(mapper.process(row)).to eq({ name: 'beaker', status: 'Active', address: nil }) }
+  specify { expect(mapper.process(row)).to eq({ name: 'beaker', status: 'Active'}) }
+  specify { expect(FieldMapper.fields).to eq({user: :user_id}) }
+  specify { expect(field_mapper.process(row)).to eq({ user_id: '1', name: 'beaker', status: 'Active' }) }
 end
