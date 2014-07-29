@@ -1,7 +1,9 @@
 module Dataly
   class Mapper
     attr_reader :model
-    cattr_reader :fields
+
+    class_attribute :fields
+    self.fields = {}
 
     def self.field(from, symbol_or_proc)
       fields[from] = symbol_or_proc
