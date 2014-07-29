@@ -43,7 +43,7 @@ end
 
 require 'dataly'
 
-class CompanyMapper < Dataly::Importer
+class CompanyMapper < Dataly::Mapper
   def process(row)
      row[:site_id] = Site.find(row[:site_id)
      row
@@ -59,7 +59,7 @@ CompanyImporter.new('files/test.csv', default_mapper: CompanyMapper.new).process
 ```ruby
 require 'dataly'
 
-class CompanyCreator < Dataly::Mapper
+class CompanyCreator < Dataly::Creator
   def save!
      Company.new(attributes).save!
   end
