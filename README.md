@@ -42,6 +42,7 @@ end
 ```
 
 ### Creating your own mapper
+
 ```ruby
 
 require 'dataly'
