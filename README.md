@@ -56,7 +56,6 @@ end
 CompanyImporter.new('files/test.csv', default_mapper: CompanyMapper.new).process
 ```
 
-
 ### Creating a custom creator
 
 ```ruby
@@ -71,6 +70,13 @@ end
 CompanyImporter.new('files/test.csv', default_creator: CompanyCreator.new).process
 ```
 
+### Using batch creator
+
+```ruby
+require 'dataly'
+
+CompanyImporter.new('files/test.csv', default_creator: BatchCreator.new(10)).process
+```
 
 ### Raising errors
 
