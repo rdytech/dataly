@@ -75,7 +75,7 @@ CompanyImporter.new('files/test.csv', default_creator: CompanyCreator.new).proce
 ```ruby
 require 'dataly'
 
-CompanyImporter.new('files/test.csv', default_creator: BatchCreator.new(10)).process
+CompanyImporter.new('files/test.csv', default_creator: Dataly::BatchCreator.new(10)).process
 ```
 
 ### Raising errors
