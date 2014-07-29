@@ -1,13 +1,10 @@
 module Dataly
   class Mapper
     attr_reader :model
+    cattr_reader :fields
 
     def self.field(from, symbol_or_proc)
       fields[from] = symbol_or_proc
-    end
-
-    def self.fields
-      @@fields ||= {}
     end
 
     def initialize(model)
@@ -23,12 +20,12 @@ module Dataly
     end
 
     def switch(name, value)
-      @@fields[name] || name
+      fields[name] || name
     end
 
     def transform(name, value)
-      if @@fields[name].respond_to?(:call)
-        @@fields[name].call(value)
+      if fields[name].respond_to?(:call)
+        fields[name].call(value)
       else
         value
       end
