@@ -1,5 +1,9 @@
 # Dataly
 
+[![Code Climate](https://codeclimate.com/github/jobready/dataly.png)](https://codeclimate.com/github/jobready/dataly)
+[![Build Status](https://travis-ci.org/jobready/dataly.svg)](https://travis-ci.org/jobready/dataly)
+
+
 Simple data import from csv.
 
 ## Installation
