@@ -75,7 +75,7 @@ By default errors are logged, to raise errors instead `errors: :raise`.
 E.g.
 
 ```ruby
-Importer.new('sample.csv', { errors: :raise } )
+Importer.new('sample.csv', errors: :raise)
 ``` 
 
 ## TODO

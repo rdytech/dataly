@@ -1,12 +1,17 @@
 module Dataly
   class Importer
+    attr_reader :model, :logger, :errors
 
     def self.model(model)
       @model = model
     end
 
     def model
-      self.class.instance_variable_get(:@model)
+      @model ||=  self.class.instance_variable_get(:@model)
+    end
+
+    def logger
+      @logger ||= Logger.new(STDOUT)
     end
 
     def mapper
@@ -19,7 +24,7 @@ module Dataly
 
     def initialize(filename, options = {})
       @filename = filename
-      @model = self.model
+      @model = options[:model] || self.model
       @errors = options.fetch(:errors, :log)
       @default_mapper = options.fetch(:default_mapper, Mapper)
       @default_creator = options.fetch(:default_creator, Dataly::Creator)
@@ -28,13 +33,21 @@ module Dataly
     def process
       csv.each do |row|
         data = mapper.process(row)
-        begin
-          creator.create(data)
-        rescue Exception => e
-          logger.error(e.message)
-          raise e if errors === :raise
-        end
+        process_create(data)
       end
+    end
+
+    def process_create(data)
+      begin
+        creator.create(data)
+      rescue Exception => e
+        create_failed!(e)
+      end
+    end
+
+    def create_failed!(e)
+      logger.error(e.message)
+      raise e if errors === :raise
     end
 
     def csv
