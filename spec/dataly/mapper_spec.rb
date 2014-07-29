@@ -5,6 +5,7 @@ end
 
 class FieldMapper < Dataly::Mapper
   field :user, :user_id
+  field :age, Proc.new {|value| value.to_i }
 end
 
 describe Dataly::Mapper do
@@ -16,9 +17,9 @@ describe Dataly::Mapper do
     {
       name: 'beaker',
       status: 'Active',
-      age: 21,
-      address: ''
-      user: "1"
+      age: '21',
+      address: '',
+      user: '1'
     }
   end
 
@@ -28,6 +29,6 @@ describe Dataly::Mapper do
 
   specify { expect(mapper.process(row)).to eq({ name: 'beaker', status: 'Active', address: nil }) }
   specify { expect(mapper.process(row)).to eq({ name: 'beaker', status: 'Active'}) }
-  specify { expect(FieldMapper.fields).to eq({user: :user_id}) }
+  specify { expect(FieldMapper.fields.keys).to eq([:user, :age]) }
   specify { expect(field_mapper.process(row)).to eq({ user_id: '1', name: 'beaker', status: 'Active' }) }
 end
