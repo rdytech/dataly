@@ -4,12 +4,18 @@ class Sample
 end
 
 class FieldMapper < Dataly::Mapper
-  field :user, to: :user_id
+  USERS = {'beaker@gmail.com' => 1}
+
+  field :user_email, to: :user_id, value: :find_user_id
   field :age, value: Proc.new { |value| value.to_i }
   field :status, value: :update_status
 
   def update_status(value)
     value.downcase
+  end
+
+  def find_user_id(value)
+    USERS[value]
   end
 end
 
@@ -28,7 +34,7 @@ describe Dataly::Mapper do
       age: '21',
       pets: 'false',
       address: '',
-      user: '1'
+      user: 'beaker@gmail.com'
     }
   end
 
@@ -36,6 +42,6 @@ describe Dataly::Mapper do
     allow(Sample).to receive(:attribute_names).and_return(valid_attributes)
   end
 
-  specify { expect(mapper.process(row)).to eq({ name: 'beaker', address: nil, status: 'active', user_id: '1', age: 21 }) }
-  specify { expect(mapper.fields.keys).to eq([:user, :age, :status]) }
+  specify { expect(mapper.process(row)).to eq({ name: 'beaker', address: nil, status: 'active', user_id: 1, age: 21 }) }
+  specify { expect(mapper.fields.keys).to eq([:user_email, :age, :status]) }
 end
