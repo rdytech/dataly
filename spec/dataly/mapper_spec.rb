@@ -13,6 +13,10 @@ class FieldMapper < Dataly::Mapper
   end
 end
 
+class SecondFieldMapper < Dataly::Mapper
+  field :user_2, to: :user_id
+end
+
 describe Dataly::Mapper do
   let(:valid_attributes) { %w(name status address user_id age) }
   let(:mapper) { FieldMapper.new(Sample) }
