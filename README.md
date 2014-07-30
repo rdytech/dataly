@@ -77,7 +77,7 @@ CompanyImporter.new('files/test.csv', mapper: CompanyMapper.new).process
 require 'dataly'
 
 class CompanyCreator < Dataly::Creator
-  def save!
+  def create(attributes)
      Company.new(attributes).save!
   end
 end
@@ -90,7 +90,7 @@ CompanyImporter.new('files/test.csv', creator: CompanyCreator.new).process
 ```ruby
 require 'dataly'
 
-CompanyImporter.new('files/test.csv', creator: Dataly::BatchCreator.new(10)).process
+CompanyImporter.new('files/test.csv', creator: Dataly::BatchCreator.new(Company, 10)).process
 ```
 
 ### Raising errors
@@ -100,7 +100,18 @@ E.g.
 
 ```ruby
 Importer.new('sample.csv', errors: :raise)
-``` 
+```
+
+### Reporting
+
+```ruby
+require 'dataly'
+
+results = CompanyImporter.new('files/test.csv').process
+results.errors.each do |error|
+  puts "Failed #{error.row} because of #{error.exception}"
+end
+```
 
 ## TODO
 
