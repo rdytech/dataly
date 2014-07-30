@@ -1,4 +1,4 @@
-class Dataly::Reporting::RowError
+class Dataly::RowError
   attr_reader :data
   attr_reader :message
 
