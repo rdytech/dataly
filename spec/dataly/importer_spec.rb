@@ -4,8 +4,10 @@ class Sample
 end
 
 class SampleMapper < Dataly::Mapper
+  field :age, value: Proc.new { |value| value.to_i }
+
   def attributes
-    %w(name status)
+    %i(name status age)
   end
 end
 
@@ -19,8 +21,8 @@ end
 
 def create_sample_csv(file)
   File.open(file, 'w') do |f|
-    f.write "name,status\n"
-    f.write "Jack Bauer,active\n"
+    f.write "name,status,age\n"
+    f.write "Jack Bauer,active,10\n"
   end
 end
 
@@ -40,7 +42,9 @@ describe Dataly::Importer do
 
   it 'creates an instance of the importers model for each row' do
     expect(Sample).to receive(:new).with({ name: "Jack Bauer",
-      status: "active" })
+      status: "active",
+      age: 10
+    })
     importer.process
   end
   context 'Default notification' do

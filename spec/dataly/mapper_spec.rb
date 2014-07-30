@@ -4,9 +4,11 @@ class Sample
 end
 
 class FieldMapper < Dataly::Mapper
-  USERS = {'beaker@gmail.com' => 1}
+  USERS = {'beaker@example.com' => 1}
 
-  field :user_email, to: :user_id, value: :find_user_id
+  rename :user, to: :user_id
+
+  field :user_id, value: :find_user_id
   field :age, value: Proc.new { |value| value.to_i }
   field :status, value: :update_status
 
@@ -20,11 +22,11 @@ class FieldMapper < Dataly::Mapper
 end
 
 class SecondFieldMapper < Dataly::Mapper
-  field :user_2, to: :user_id
+  rename :user_2, to: :user_id
 end
 
 describe Dataly::Mapper do
-  let(:valid_attributes) { %w(name status address user_id age) }
+  let(:valid_attributes) { %i(name status address user_id age) }
   let(:mapper) { FieldMapper.new(Sample) }
 
   let(:row) do
@@ -34,7 +36,7 @@ describe Dataly::Mapper do
       age: '21',
       pets: 'false',
       address: '',
-      user: 'beaker@gmail.com'
+      user: 'beaker@example.com'
     }
   end
 
@@ -43,5 +45,6 @@ describe Dataly::Mapper do
   end
 
   specify { expect(mapper.process(row)).to eq({ name: 'beaker', address: nil, status: 'active', user_id: 1, age: 21 }) }
-  specify { expect(mapper.fields.keys).to eq([:user_email, :age, :status]) }
+  specify { expect(mapper.fields.keys).to eq([:user_id, :age, :status]) }
+  specify { expect(mapper.renames.keys).to eq([:user]) }
 end
