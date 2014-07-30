@@ -54,7 +54,7 @@ class CompanyMapper < Dataly::Mapper
   end
 end
 
-CompanyImporter.new('files/test.csv', default_mapper: CompanyMapper.new).process
+CompanyImporter.new('files/test.csv', mapper: CompanyMapper.new).process
 ```
 
 ### Mapping Fields
@@ -63,12 +63,12 @@ CompanyImporter.new('files/test.csv', default_mapper: CompanyMapper.new).process
 require 'dataly'
 
 class CompanyMapper < Dataly::Mapper
-  field :user_id, Proc.new {|value| User.find_by_email(value) }
-  field :status, Proc.new {|value| CompanyStatusEnumeration.value_for(value) }
-  field :name, :trading_name
+  field :user_id, value: Proc.new {|value| User.find_by_email(value) }
+  field :status, value: Proc.new {|value| CompanyStatusEnumeration.value_for(value) }
+  field :name, to: :trading_name
 end
 
-CompanyImporter.new('files/test.csv', default_mapper: CompanyMapper.new).process
+CompanyImporter.new('files/test.csv', mapper: CompanyMapper.new).process
 ```
 
 ### Creating a custom creator
@@ -82,7 +82,7 @@ class CompanyCreator < Dataly::Creator
   end
 end
 
-CompanyImporter.new('files/test.csv', default_creator: CompanyCreator.new).process
+CompanyImporter.new('files/test.csv', creator: CompanyCreator.new).process
 ```
 
 ### Using batch creator
@@ -90,12 +90,12 @@ CompanyImporter.new('files/test.csv', default_creator: CompanyCreator.new).proce
 ```ruby
 require 'dataly'
 
-CompanyImporter.new('files/test.csv', default_creator: Dataly::BatchCreator.new(10)).process
+CompanyImporter.new('files/test.csv', creator: Dataly::BatchCreator.new(10)).process
 ```
 
 ### Raising errors
 
-By default errors are logged, to raise errors instead `errors: :raise`.
+By default errors are returned in a report, to raise errors specify `errors: :raise`.
 E.g.
 
 ```ruby
