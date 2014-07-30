@@ -17,7 +17,8 @@ module Dataly
         fields[name] = { value: value }
       end
 
-      def rename(from, to:)
+      def rename(from, to: nil)
+        return unless to
         renames[from] = to
       end
     end
@@ -35,7 +36,9 @@ module Dataly
     end
 
     def process(row)
-      row.map { |heading, value| process_column(heading, value) }.compact.to_h
+      Hash[row.map do |heading, value|
+        process_column(heading, value)
+      end.compact]
     end
 
     private
