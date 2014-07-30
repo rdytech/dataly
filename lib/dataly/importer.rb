@@ -26,25 +26,30 @@ module Dataly
       @errors = options.fetch(:errors, :log)
       @default_mapper = options.fetch(:default_mapper, Mapper)
       @default_creator = options.fetch(:default_creator, Dataly::Creator)
+      @import_reporter = Dataly::Reporting::ImportReporter.new(filename)
     end
 
     def process
       csv.each do |row|
         data = mapper.process(row)
         process_create(data)
+        @import_reporter.row_added()
       end
+      @import_reporter.report
     end
 
     def process_create(data)
       begin
         creator.create(data)
       rescue Exception => e
-        create_failed!(e)
+        create_failed!(e, data)
       end
     end
 
-    def create_failed!(e)
+    def create_failed!(e, data)
+      logger.error(data)
       logger.error(e.message)
+      @import_reporter.report_error(e, data)
       raise e if errors === :raise
     end
 

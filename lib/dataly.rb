@@ -15,6 +15,10 @@ require 'dataly/importer'
 require 'dataly/mapper'
 require 'dataly/creator'
 require 'dataly/batch_creator'
+require 'dataly/reporting/import_report'
+require 'dataly/reporting/import_reporter'
+require 'dataly/reporting/row_error'
+
 
 Dataly.logger = Logger.new(STDOUT)
 Dataly.logger.level = Logger::ERROR
