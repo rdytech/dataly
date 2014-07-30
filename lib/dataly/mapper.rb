@@ -1,4 +1,3 @@
-require 'pry'
 module Dataly
   class Mapper
     attr_reader :model

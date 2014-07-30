@@ -1,15 +1,11 @@
 module Dataly
   class Importer
-    attr_reader :logger, :errors
+    attr_reader :reporter
 
     class_attribute :model
 
     def self.model(model)
       self.model = model
-    end
-
-    def logger
-      @logger ||= Logger.new(STDOUT)
     end
 
     def mapper
@@ -23,34 +19,33 @@ module Dataly
     def initialize(filename, options = {})
       @filename = filename
       @model = options[:model] || self.model
-      @errors = options.fetch(:errors, :log)
-      @default_mapper = options.fetch(:default_mapper, Mapper)
-      @default_creator = options.fetch(:default_creator, Dataly::Creator)
-      @import_reporter = Dataly::Reporting::ImportReporter.new(filename)
+      @errors = options[:errors]
+      @mapper = options.fetch(:mapper, Dataly::Mapper.new(@model))
+      @creator = options.fetch(:creator, Dataly::Creator.new(@model))
+      @reporter = options.fetch(:reporter, Dataly::Reporter.new(filename))
     end
 
     def process
       csv.each do |row|
         data = mapper.process(row)
         process_create(data)
-        @import_reporter.row_added()
       end
-      @import_reporter.report
+
+      reporter.report
     end
 
     def process_create(data)
       begin
         creator.create(data)
+        reporter.processed(data)
       rescue Exception => e
-        create_failed!(e, data)
+        reporter.failed(e, data)
+        raise e if fail_fast?
       end
     end
 
-    def create_failed!(e, data)
-      logger.error(data)
-      logger.error(e.message)
-      @import_reporter.report_error(e, data)
-      raise e if errors === :raise
+    def fail_fast?
+      @errors == :raise
     end
 
     def csv

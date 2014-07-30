@@ -54,7 +54,7 @@ class CompanyMapper < Dataly::Mapper
   end
 end
 
-CompanyImporter.new('files/test.csv', default_mapper: CompanyMapper.new).process
+CompanyImporter.new('files/test.csv', mapper: CompanyMapper.new).process
 ```
 
 ### Mapping Fields
@@ -68,7 +68,7 @@ class CompanyMapper < Dataly::Mapper
   field :name, :trading_name
 end
 
-CompanyImporter.new('files/test.csv', default_mapper: CompanyMapper.new).process
+CompanyImporter.new('files/test.csv', mapper: CompanyMapper.new).process
 ```
 
 ### Creating a custom creator
@@ -82,7 +82,7 @@ class CompanyCreator < Dataly::Creator
   end
 end
 
-CompanyImporter.new('files/test.csv', default_creator: CompanyCreator.new).process
+CompanyImporter.new('files/test.csv', creator: CompanyCreator.new).process
 ```
 
 ### Using batch creator
@@ -90,7 +90,7 @@ CompanyImporter.new('files/test.csv', default_creator: CompanyCreator.new).proce
 ```ruby
 require 'dataly'
 
-CompanyImporter.new('files/test.csv', default_creator: Dataly::BatchCreator.new(10)).process
+CompanyImporter.new('files/test.csv', creator: Dataly::BatchCreator.new(10)).process
 ```
 
 ### Raising errors
