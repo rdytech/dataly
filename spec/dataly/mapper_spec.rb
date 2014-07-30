@@ -15,10 +15,6 @@ end
 
 class SecondFieldMapper < Dataly::Mapper
   field :user_2, to: :user_id
-
-  def update_status(value)
-    value.downcase
-  end
 end
 
 describe Dataly::Mapper do
