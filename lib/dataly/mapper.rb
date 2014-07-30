@@ -2,11 +2,18 @@ module Dataly
   class Mapper
     attr_reader :model
 
-    class_attribute :fields
-    self.fields = {}
+    class << self
+      def fields
+        @fields ||= {}
+      end
 
-    def self.field(from, hash)
-      fields[from] = hash
+      def field(name, to: name, value: nil)
+        fields[name] = { to: to, value: value }
+      end
+    end
+
+    def fields
+      self.class.fields
     end
 
     def initialize(model)
@@ -14,50 +21,44 @@ module Dataly
     end
 
     def process(row)
-      row.map { |name, value|
-        name, value = switch(name, value)
-        [name.to_sym, (value.blank? ? nil : value)] if attributes.include?(name.to_s)
-      }.compact.to_h
+      row.map { |column| process_column(*column) }.compact.to_h
     end
 
-    def switch(name, value)
-      key = name.to_sym
-      return [name, value] unless mapping_exists?(key)
+    private
+    def process_column(k, v)
+      key = map_to(k)
+      val = mapping_exists?(k) ? transform(k, v) : v
+      val = blank_to_nil(val)
 
-      name = map_to(key, name)
-      value = transform(key, value)
-
-      [name, value]
+      return [key.to_sym, val] if attributes.include?(key.to_s)
     end
 
-    def transform(name, value)
-      transformer = map_value(name)
-      return value unless transformer
+    def map_to(k)
+      mapping_exists?(k) ? fields[k][:to] : k
+    end
+
+    def transform(csv_field_name, csv_value)
+      transformer = fields[csv_field_name][:value]
 
       if transformer.respond_to?(:call)
-        transformer.call(value)
-      elsif respond_to?(transformer)
-        send(transformer, value)
+        transformer.call(csv_value)
+      elsif transformer && respond_to?(transformer)
+        send(transformer, csv_value)
       else
-        value
+        csv_value
       end
     end
 
-    def map_value(key)
-      fields[key][:value]
-    end
-
-    def map_to(key, default)
-      fields[key][:to] || default
-    end
-
     def mapping_exists?(key)
-      fields[key]
+      fields[key].present?
+    end
+
+    def blank_to_nil(val)
+      val.is_a?(String) && val.empty? ? nil : val
     end
 
     def attributes
-      @model.attribute_names
+      @attributes ||= model.attribute_names
     end
-
   end
 end
