@@ -65,7 +65,7 @@ require 'dataly'
 class CompanyMapper < Dataly::Mapper
   field :user_id, value: Proc.new {|value| User.find_by_email(value) }
   field :status, value: Proc.new {|value| CompanyStatusEnumeration.value_for(value) }
-  field :name, to: :trading_name
+  rename :name, to: :trading_name
 end
 
 CompanyImporter.new('files/test.csv', mapper: CompanyMapper.new).process

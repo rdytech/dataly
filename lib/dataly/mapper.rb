@@ -1,3 +1,5 @@
+require 'byebug'
+
 module Dataly
   class Mapper
     attr_reader :model
@@ -7,8 +9,16 @@ module Dataly
         @fields ||= {}
       end
 
-      def field(name, to: name, value: nil)
-        fields[name] = { to: to, value: value }
+      def renames
+        @renames ||= {}
+      end
+
+      def field(name, value: nil)
+        fields[name] = { value: value }
+      end
+
+      def rename(from, to:)
+        renames[from] = to
       end
     end
 
@@ -16,25 +26,30 @@ module Dataly
       self.class.fields
     end
 
+    def renames
+      self.class.renames
+    end
+
     def initialize(model)
       @model = model
     end
 
     def process(row)
-      row.map { |column| process_column(*column) }.compact.to_h
+      row.map { |heading, value| process_column(heading, value) }.compact.to_h
     end
 
     private
     def process_column(k, v)
       key = map_to(k)
-      val = mapping_exists?(k) ? transform(k, v) : v
+
+      val = mapping_exists?(key) ? transform(key, v) : v
       val = blank_to_nil(val)
 
-      return [key.to_sym, val] if attributes.include?(key.to_s)
+      return [key.to_sym, val] if attributes.include?(key)
     end
 
     def map_to(k)
-      mapping_exists?(k) ? fields[k][:to] : k
+      renames[k] ? renames[k] : k
     end
 
     def transform(csv_field_name, csv_value)
@@ -58,7 +73,7 @@ module Dataly
     end
 
     def attributes
-      @attributes ||= model.attribute_names
+      @attributes ||= model.attribute_names.map(&:to_sym)
     end
   end
 end
