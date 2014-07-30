@@ -13,13 +13,14 @@ class Dataly::Reporter
   end
 
   def failed(error, data = nil)
-    @errors << Dataly::RowError.new(error, data)
+    @errors << { error: error, data: data }
   end
 
-  def success(data)
+  def processed(data)
     row_added
   end
 
+  private
   def row_added
     @total_rows = @total_rows + 1
   end
