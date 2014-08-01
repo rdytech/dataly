@@ -20,6 +20,7 @@ module Dataly
       @filename = filename
       @model = options[:model] || self.model
       @errors = options[:errors]
+      @skip_validations = options[:skip_validations]
       @mapper = options.fetch(:mapper, Dataly::Mapper.new(@model))
       @creator = options.fetch(:creator, Dataly::Creator.new(@model))
       @reporter = options.fetch(:reporter, Dataly::Reporter.new(filename))
@@ -36,7 +37,7 @@ module Dataly
 
     def process_create(data)
       begin
-        creator.create(data)
+        creator.create(data, @skip_validations)
         reporter.processed(data)
       rescue Exception => e
         reporter.failed(e, data)
