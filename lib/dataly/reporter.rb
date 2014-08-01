@@ -1,27 +1,28 @@
 class Dataly::Reporter
-  attr_reader :formatter, :errors, :total_rows, :filename
+  attr_reader :formatter, :errors, :rows_read, :filename
 
   def initialize(filename, formatter = nil)
     @formatter = formatter || Dataly::ReportFormatter.new
     @errors = []
-    @total_rows = 0
+    @rows_read = 0
     @filename = filename
   end
 
   def output
-    formatter.process(filename, total_rows, errors).output
+    formatter.process(filename, rows_read, errors).output
   end
 
   def failed(error, data = nil)
     @errors << { error: error, data: data }
+    row_read
   end
 
   def processed(data)
-    row_added
+    row_read
   end
 
   private
-  def row_added
-    @total_rows = @total_rows + 1
+  def row_read
+    @rows_read = @rows_read + 1
   end
 end

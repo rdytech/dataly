@@ -10,7 +10,7 @@ describe Dataly::Reporter do
       reporter.processed('data')
     end
     let(:expected_rows_processed) { 1 }
-    specify { expect(reporter.total_rows).to eq(expected_rows_processed) }
+    specify { expect(reporter.rows_read).to eq(expected_rows_processed) }
   end
 
   context 'reporting failed' do

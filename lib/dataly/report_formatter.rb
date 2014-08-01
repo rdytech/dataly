@@ -1,9 +1,9 @@
 class Dataly::ReportFormatter
-  attr_reader :filename, :errors, :total_rows
+  attr_reader :filename, :errors, :rows_read
 
-  def process(filename, total_rows, errors)
+  def process(filename, rows_read, errors)
     @filename = filename
-    @total_rows = total_rows
+    @rows_read = rows_read
     @errors = errors
     self
   end
@@ -11,7 +11,7 @@ class Dataly::ReportFormatter
   def output
     report = "-" * 60
     report << "\nImported from: #{filename}\n"
-    report << "Total rows imported: #{total_rows}\n"
+    report << "Total rows read: #{rows_read}\n"
     if errors.any?
       report << "\nErrors:\n"
       report << errors(&:inspect).join("\n")
