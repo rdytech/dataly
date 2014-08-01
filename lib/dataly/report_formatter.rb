@@ -5,17 +5,18 @@ class Dataly::ReportFormatter
     @filename = filename
     @total_rows = total_rows
     @errors = errors
+    self
   end
 
   def output
-      report = <<"END_OF_REPORT"
-Total rows imported : #{total_rows}
-------------------------------------
-
-Errors:
-#{errors.each { |error| error.message }}
-
-END_OF_REPORT
-    report
+    report = "-" * 60
+    report << "\nImported from: #{filename}\n"
+    report << "Total rows imported: #{total_rows}\n"
+    if errors.any?
+      report << "\nErrors:\n"
+      report << errors(&:inspect).join("\n")
+    end
+    report << "\n"
+    report << "-" * 60
   end
 end

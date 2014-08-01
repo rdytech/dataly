@@ -8,8 +8,8 @@ class Dataly::Reporter
     @filename = filename
   end
 
-  def report
-    formatter.process(filename, total_rows, errors)
+  def output
+    formatter.process(filename, total_rows, errors).output
   end
 
   def failed(error, data = nil)

@@ -35,7 +35,6 @@ describe Dataly::Importer do
   before do
     create_sample_csv('sample.csv')
     allow(reporter).to receive(:processed)
-    allow(reporter).to receive(:report)
     allow(Sample).to receive(:new).and_return(sample_file)
     allow(sample_file).to receive(:save!).and_return(true)
   end
@@ -59,9 +58,8 @@ describe Dataly::Importer do
       importer.process
     end
 
-    it 'returns the report' do
-      allow(reporter).to receive(:report).and_return('report')
-      expect(importer.process).to eql('report')
+    it 'returns the reporter' do
+      expect(importer.process).to eql(reporter)
     end
 
   end

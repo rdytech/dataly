@@ -31,7 +31,7 @@ module Dataly
         process_create(data)
       end
 
-      reporter.report
+      reporter
     end
 
     def process_create(data)
