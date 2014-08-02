@@ -1,6 +1,9 @@
 module Dataly
   class Importer
     attr_reader :reporter
+    attr_reader :mapper
+    attr_reader :creator
+    attr_reader :context
 
     class_attribute :model
 
@@ -8,22 +11,16 @@ module Dataly
       self.model = model
     end
 
-    def mapper
-      @mapper ||= @default_mapper.new(model)
-    end
-
-    def creator
-      @creator ||= @default_creator.new(model)
-    end
 
     def initialize(filename, options = {})
       @filename = filename
-      @model = options[:model] || self.model
+      @model = options.fetch(:model, self.model)
       @errors = options[:errors]
-      @skip_validations = options[:skip_validations]
-      @mapper = options.fetch(:mapper, Dataly::Mapper.new(@model))
-      @creator = options.fetch(:creator, Dataly::Creator.new(@model))
-      @reporter = options.fetch(:reporter, Dataly::Reporter.new(filename))
+      @context = options.fetch(:context, {})
+      @mapper = options.fetch(:mapper, Dataly::Mapper).new(@model)
+      @creator = options.fetch(:creator, Dataly::Creator).new(@model, context)
+      @reporter = options.fetch(:reporter, Dataly::Reporter).new(filename)
+      @create_options = { save_options: options.fetch(:save_options, {}) }
     end
 
     def process
@@ -37,7 +34,7 @@ module Dataly
 
     def process_create(data)
       begin
-        creator.create(data, @skip_validations)
+        creator.create(data, @create_options)
         reporter.processed(data)
       rescue Exception => e
         reporter.failed(e, data)

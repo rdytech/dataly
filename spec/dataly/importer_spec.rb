@@ -28,12 +28,14 @@ end
 
 describe Dataly::Importer do
   include FakeFS::SpecHelpers
+
   let(:reporter) { instance_double(Dataly::Reporter) }
-  let(:importer) { SampleImporter.new('sample.csv', { reporter: reporter }) }
+  let(:importer) { SampleImporter.new('sample.csv', { reporter: Dataly::Reporter }) }
   let(:sample_file) { double(:sample) }
 
   before do
     create_sample_csv('sample.csv')
+    allow(Dataly::Reporter).to receive(:new).and_return(reporter)
     allow(reporter).to receive(:processed)
     allow(Sample).to receive(:new).and_return(sample_file)
     allow(sample_file).to receive(:save!).and_return(true)

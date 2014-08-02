@@ -12,6 +12,7 @@ class Dataly::ReportFormatter
     report = "-" * 60
     report << "\nImported from: #{filename}\n"
     report << "Total rows read: #{rows_read}\n"
+    report << "Total error rows: #{errors.length}\n"
     if errors.any?
       report << "\nErrors:\n"
       report << errors(&:inspect).join("\n")

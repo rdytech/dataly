@@ -1,13 +1,15 @@
 module Dataly
   class Creator
     attr_reader :model
+    attr_reader :context
 
-    def initialize(model)
+    def initialize(model, context = {})
       @model = model
+      @context = context
     end
 
-    def create(attributes, skip_validations = nil)
-      save_options= skip_validations ? { validate: false } : {}
+    def create(attributes, options = {})
+      save_options= options.fetch(:save_options, nil)
       model.new(attributes).save!(save_options)
     end
   end
