@@ -11,6 +11,7 @@ class FieldMapper < Dataly::Mapper
   field :user_id, value: :find_user_id
   field :age, value: Proc.new { |value| value.to_i }
   field :status, value: :update_status
+  field :kind, default: 1
 
   def update_status(value)
     value.downcase
@@ -45,6 +46,6 @@ describe Dataly::Mapper do
   end
 
   specify { expect(mapper.process(row)).to eq({ name: 'beaker', address: nil, status: 'active', user_id: 1, age: 21 }) }
-  specify { expect(mapper.fields.keys).to eq([:user_id, :age, :status]) }
+  specify { expect(mapper.fields.keys).to eq([:user_id, :age, :status, :kind]) }
   specify { expect(mapper.renames.keys).to eq([:user]) }
 end

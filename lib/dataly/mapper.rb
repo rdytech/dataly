@@ -13,8 +13,8 @@ module Dataly
         @renames ||= {}
       end
 
-      def field(name, value: nil)
-        fields[name] = { value: value }
+      def field(name, value: nil, default: nil)
+        fields[name] = { value: value, default: default}
       end
 
       def rename(from, to: nil)
@@ -46,7 +46,7 @@ module Dataly
       key = map_to(k)
 
       val = mapping_exists?(key) ? transform(key, v) : v
-      val = blank_to_nil(val)
+      val = default_value(key, val)
 
       return [key.to_sym, val] if attributes.include?(key)
     end
@@ -69,6 +69,12 @@ module Dataly
 
     def mapping_exists?(key)
       fields[key].present?
+    end
+
+    def default_value(key, value)
+      value = blank_to_nil(value)
+      value = fields[key].fetch(:default, value) if mapping_exists?(key) 
+      value
     end
 
     def blank_to_nil(val)
