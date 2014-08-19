@@ -9,7 +9,7 @@ module Dataly
     end
 
     def create(attributes, options = {})
-      save_options= options.fetch(:save_options, nil)
+      save_options = options.fetch(:save_options, nil)
       model.new(attributes).save!(save_options)
     end
   end

@@ -1,21 +1,23 @@
 class Dataly::BatchCreator < Dataly::Creator
   attr_reader :count, :batch
 
-  def initialize(model, count=10)
+  def initialize(model, context = {}, count = 10)
     @model = model
-    @count = count
     @batch = []
+    @count = count
   end
 
   def save!(attributes)
     model.new(attributes).save!
   end
 
-  def create(attributes)
-    batch << row
+  def create(attributes, options = {})
+    batch << attributes
 
     if batch.length == count
-      drain
+      model.transaction do
+        drain
+      end
     end
   end
 
