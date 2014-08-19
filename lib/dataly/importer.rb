@@ -19,7 +19,7 @@ module Dataly
       @context = options.fetch(:context, {})
       @mapper = options.fetch(:mapper, Dataly::Mapper).new(@model)
       @creator = options.fetch(:creator, Dataly::Creator).new(@model, context)
-      @reporter = options.fetch(:reporter, Dataly::Reporter).new(filename)
+      @reporter = options.fetch(:reporter, Dataly::Reporter.new(filename))
       @create_options = { save_options: options.fetch(:save_options, {}) }
     end
 
