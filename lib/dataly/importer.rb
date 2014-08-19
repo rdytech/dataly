@@ -24,12 +24,15 @@ module Dataly
     end
 
     def process
+      drain(open(@filename))
+      reporter
+    end
+
+    def drain(csv)
       csv.each do |row|
         data = mapper.process(row)
         process_create(data)
       end
-
-      reporter
     end
 
     def process_create(data)
@@ -46,8 +49,10 @@ module Dataly
       @errors == :raise
     end
 
-    def csv
-      CSV.open(@filename, { headers: true, header_converters: :symbol, encoding: 'utf-8' })
+    def open(file)
+      CSV.open(file, { headers: true,
+                       header_converters: :symbol,
+                       encoding: 'utf-8' })
     end
   end
 end
