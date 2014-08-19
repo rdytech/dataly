@@ -3,8 +3,7 @@
 [![Code Climate](https://codeclimate.com/github/jobready/dataly.png)](https://codeclimate.com/github/jobready/dataly)
 [![Build Status](https://travis-ci.org/jobready/dataly.svg)](https://travis-ci.org/jobready/dataly)
 
-
-Simple data import from csv.
+Simple data import from csv. This gem allows you to define a mapper class, and a creator class to import data into your application via CSV.
 
 ## Installation
 
@@ -87,10 +86,23 @@ CompanyImporter.new('files/test.csv', creator: CompanyCreator.new).process
 
 ### Using batch creator
 
+This creates the objects in batches (using transactions)
+
 ```ruby
 require 'dataly'
 
 CompanyImporter.new('files/test.csv', creator: Dataly::BatchCreator.new(Company, 10)).process
+```
+
+### Using batch importer
+
+This splits the file into multiple files before processing
+
+
+```ruby
+require 'dataly'
+
+BatchImporter.new('files/test.csv', creator: Dataly::BatchCreator.new(Company, 10)).process
 ```
 
 ### Raising errors
