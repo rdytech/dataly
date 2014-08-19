@@ -9,8 +9,11 @@ module Dataly
 end
 
 require 'dataly/importer'
+require 'dataly/file_splitter'
+require 'dataly/batch_importer'
 require 'dataly/mapper'
 require 'dataly/creator'
 require 'dataly/batch_creator'
 require 'dataly/reporter'
 require 'dataly/report_formatter'
+require 'dataly/json_formatter'
