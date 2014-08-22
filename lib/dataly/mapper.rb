@@ -43,12 +43,11 @@ module Dataly
 
     private
     def process_column(k, v)
-      key = map_to(k)
+      return unless attributes.include?(key = map_to(k))
 
       val = mapping_exists?(key) ? transform(key, v) : v
       val = blank_to_nil(val)
-
-      return [key.to_sym, val] if attributes.include?(key)
+      [key.to_sym, val]
     end
 
     def map_to(k)
