@@ -60,7 +60,6 @@ module Dataly
 
       if transformer.respond_to?(:call)
         call_transformer(transformer, csv_value, values)
-        transformer.call(csv_value)
       elsif transformer && respond_to?(transformer)
         send(transformer, csv_value)
       else
