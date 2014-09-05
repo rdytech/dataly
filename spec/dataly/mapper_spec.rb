@@ -11,6 +11,7 @@ class FieldMapper < Dataly::Mapper
   field :user_id, value: :find_user_id
   field :age, value: Proc.new { |value| value.to_i }
   field :status, value: :update_status
+  field :properties, value: :other
 
   def update_status(value)
     value.downcase
@@ -19,6 +20,14 @@ class FieldMapper < Dataly::Mapper
   def find_user_id(value)
     USERS[value]
   end
+
+  def other(value, values)
+    if values[:user_id] == 1
+      2
+    else
+      value
+    end
+  end
 end
 
 class SecondFieldMapper < Dataly::Mapper
@@ -26,7 +35,7 @@ class SecondFieldMapper < Dataly::Mapper
 end
 
 describe Dataly::Mapper do
-  let(:valid_attributes) { %i(name status address user_id age) }
+  let(:valid_attributes) { %i(name status address properties user_id age) }
   let(:mapper) { FieldMapper.new(Sample) }
 
   let(:row) do
@@ -45,6 +54,6 @@ describe Dataly::Mapper do
   end
 
   specify { expect(mapper.process(row)).to eq({ name: 'beaker', address: nil, status: 'active', user_id: 1, age: 21 }) }
-  specify { expect(mapper.fields.keys).to eq([:user_id, :age, :status]) }
+  specify { expect(mapper.fields.keys).to eq([:user_id, :age, :status, :properties]) }
   specify { expect(mapper.renames.keys).to eq([:user]) }
 end
