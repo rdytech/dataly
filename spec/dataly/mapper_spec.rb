@@ -44,7 +44,7 @@ describe Dataly::Mapper do
     allow(Sample).to receive(:attribute_names).and_return(valid_attributes)
   end
 
-  specify { expect(mapper.process(row)).to eq({ name: 'beaker', address: nil, status: 'active', user_id: 1, age: 21 }) }
+  specify { expect(mapper.process(row)).to eq({ name: 'beaker', address: nil, status: 'active', user_id: 1, age: 21, pets: 'false'   }) }
   specify { expect(mapper.fields.keys).to eq([:user_id, :age, :status]) }
   specify { expect(mapper.renames.keys).to eq([:user]) }
 end

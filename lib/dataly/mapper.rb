@@ -1,5 +1,3 @@
-require 'byebug'
-
 module Dataly
   class Mapper
     attr_reader :model
@@ -48,7 +46,7 @@ module Dataly
       val = mapping_exists?(key) ? transform(key, v) : v
       val = blank_to_nil(val)
 
-      return [key.to_sym, val] if attributes.include?(key)
+      return [key.to_sym, val]
     end
 
     def map_to(k)
