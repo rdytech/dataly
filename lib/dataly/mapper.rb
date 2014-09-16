@@ -44,7 +44,6 @@ module Dataly
     private
     def process_column(k, v, row)
       key = map_to(k)
-
       val = mapping_exists?(key) ? transform(key, v, row) : v
       val = blank_to_nil(val)
 
@@ -59,19 +58,11 @@ module Dataly
       transformer = fields[csv_field_name][:value]
 
       if transformer.respond_to?(:call)
-        call_transformer(transformer, csv_value, values)
+        transformer.call(csv_value, values)
       elsif transformer && respond_to?(transformer)
-        send(transformer, csv_value)
+        method(transformer).call(csv_value, values)
       else
         csv_value
-      end
-    end
-
-    def call_transformer(transformer, value, values)
-      if transformer.arity == 1
-        transformer.call(value)
-      else
-        transformer.call(value, values)
       end
     end
 

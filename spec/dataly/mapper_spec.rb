@@ -13,20 +13,16 @@ class FieldMapper < Dataly::Mapper
   field :status, value: :update_status
   field :properties, value: :other
 
-  def update_status(value)
+  def update_status(value, csv_values)
     value.downcase
   end
 
-  def find_user_id(value)
+  def find_user_id(value, csv_values)
     USERS[value]
   end
 
   def other(value, values)
-    if values[:user_id] == 1
-      2
-    else
-      value
-    end
+    "#{value} - #{values[:other_value]}"
   end
 end
 
@@ -45,7 +41,9 @@ describe Dataly::Mapper do
       age: '21',
       pets: 'false',
       address: '',
-      user: 'beaker@example.com'
+      user: 'beaker@example.com',
+      other_value: 'Some other Value',
+      properties: 'XXX'
     }
   end
 
@@ -53,7 +51,7 @@ describe Dataly::Mapper do
     allow(Sample).to receive(:attribute_names).and_return(valid_attributes)
   end
 
-  specify { expect(mapper.process(row)).to eq({ name: 'beaker', address: nil, status: 'active', user_id: 1, age: 21 }) }
+  specify { expect(mapper.process(row)).to eq({ name: 'beaker', address: nil, status: 'active', user_id: 1, age: 21, properties: 'XXX - Some other Value' }) }
   specify { expect(mapper.fields.keys).to eq([:user_id, :age, :status, :properties]) }
   specify { expect(mapper.renames.keys).to eq([:user]) }
 end

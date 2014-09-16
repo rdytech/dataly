@@ -30,7 +30,7 @@ describe Dataly::Importer do
   include FakeFS::SpecHelpers
 
   let(:reporter) { instance_double(Dataly::Reporter) }
-  let(:importer) { SampleImporter.new('sample.csv', { reporter: Dataly::Reporter }) }
+  let(:importer) { SampleImporter.new('sample.csv', { reporter: reporter }) }
   let(:sample_file) { double(:sample) }
 
   before do
