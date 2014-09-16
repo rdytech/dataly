@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version = Dataly::VERSION
   spec.authors = ["Andrew McNamara"]
   spec.email = ["andrewm@jobready.com.au"]
-  spec.summary = %q{Data import}
-  spec.description = %q{TODO: Write a longer description. Optional.}
+  spec.summary = %q{Simple data import from CSV.}
+  spec.description = %q{This gem allows you to define a mapper class, and a creator class to import data into your application via CSV.}
   spec.homepage = ""
   spec.license = "MIT"
 
