@@ -37,15 +37,14 @@ module Dataly
 
     def process(row)
       Hash[row.map do |heading, value|
-        process_column(heading, value)
+        process_column(heading, value, row)
       end.compact]
     end
 
     private
-    def process_column(k, v)
+    def process_column(k, v, row)
       key = map_to(k)
-
-      val = mapping_exists?(key) ? transform(key, v) : v
+      val = mapping_exists?(key) ? transform(key, v, row) : v
       val = blank_to_nil(val)
 
       return [key.to_sym, val] if attributes.include?(key)
@@ -55,13 +54,13 @@ module Dataly
       renames[k] ? renames[k] : k
     end
 
-    def transform(csv_field_name, csv_value)
+    def transform(csv_field_name, csv_value, values)
       transformer = fields[csv_field_name][:value]
 
       if transformer.respond_to?(:call)
-        transformer.call(csv_value)
+        transformer.call(csv_value, values)
       elsif transformer && respond_to?(transformer)
-        send(transformer, csv_value)
+        method(transformer).call(csv_value, values)
       else
         csv_value
       end
