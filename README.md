@@ -1,7 +1,8 @@
 # Dataly
 
+[![Test Coverage](https://codeclimate.com/github/jobready/dataly/badges/coverage.svg)](https://codeclimate.com/github/jobready/dataly)
 [![Code Climate](https://codeclimate.com/github/jobready/dataly.png)](https://codeclimate.com/github/jobready/dataly)
-[![Build Status](https://travis-ci.org/jobready/dataly.svg)](https://travis-ci.org/jobready/dataly)
+[![Build status](https://badge.buildbox.io/38a84e6a421e7907ee53760a3315bf6d046fb6f660b84fb42f.svg)](https://buildbox.io/accounts/jobready/projects/dataly)
 
 Simple data import from csv. This gem allows you to define a mapper class, and a creator class to import data into your application via CSV.
 
