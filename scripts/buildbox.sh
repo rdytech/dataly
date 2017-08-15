@@ -6,6 +6,7 @@ rbenv install 2.1.10 -s
 rbenv local 2.1.10
 
 echo '--- bundling activesupport 4.2'
+rm -f Gemfile.lock
 ACTIVESUPPORT_VERSION="~> 4.0.0" bundle install -j $(nproc) --without production
 
 echo '--- running specs activesupport 4.2'
