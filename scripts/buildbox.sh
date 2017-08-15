@@ -2,7 +2,7 @@
 set -e
 
 echo '--- setting ruby version 2.1'
-rbenv install 2.1.10
+rbenv install 2.1.10 -s
 rbenv local 2.1.10
 
 echo '--- bundling activesupport 4.2'
@@ -18,7 +18,7 @@ else
 fi
 
 echo '--- setting ruby version 2.3'
-rbenv install 2.3.4
+rbenv install 2.3.4 -s
 rbenv local 2.3.4
 
 echo '--- bundling activesupport 5.0'
@@ -34,7 +34,7 @@ else
 fi
 
 echo '--- setting ruby version 2.4'
-rbenv install 2.4.1
+rbenv install 2.4.1 -s
 rbenv local 2.4.1
 
 echo '--- bundling activesupport 5.1'
